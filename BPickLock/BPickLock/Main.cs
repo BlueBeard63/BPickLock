@@ -88,7 +88,7 @@ namespace BPickLock
         private void PickLocks(string webhook, List<PickLockInfo> rules, string color, int pickLockBreak, UnturnedPlayer uPlayer, Player ePlayer, ushort item_id, ItemJar jar)
         {
             var permissions = R.Instance.GetComponent<RocketPermissionsManager>();
-            if (permissions.HasPermission(uPlayer, new List<string>() { "PickLock" }))
+            if (permissions.HasPermission(uPlayer, new List<string>() { "Picklock" }))
             {
                 foreach (var rule in rules)
                 {
