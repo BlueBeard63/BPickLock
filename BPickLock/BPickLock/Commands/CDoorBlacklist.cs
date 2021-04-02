@@ -34,26 +34,11 @@ namespace BPickLock.Commands
                 {
                     if (PhysicsUtility.raycast(new Ray(uPlayer.Player.look.aim.position, uPlayer.Player.look.aim.forward), out RaycastHit ahit, Mathf.Infinity, RayMasks.BARRICADE_INTERACT))
                     {
-                        BarricadeManager.tryGetInfo(ahit.transform, out byte x, out byte y, out ushort index, out ushort bindex, out BarricadeRegion barricadeR);
-
-                        var Bindex = barricadeR.barricades[bindex];
-                        var Bx = Bindex.point.x;
-                        var By = Bindex.point.y;
-                        var Bz = Bindex.point.z;
-                        var n_blacklist = new DoorBlackList
+                        InteractableDoorHinge door = ahit.transform.GetComponent<InteractableDoorHinge>();
+                        Interactable2SalvageBarricade barri = ahit.transform.GetComponent<Interactable2SalvageBarricade>();
+                        if(door != null)
                         {
-                            x = Bx,
-                            y = By,
-                            z = Bz
-                        };
-                        Main.Instance.AddPlayer(n_blacklist);
-                        ChatManager.serverSendMessage("You have successfully added this door/storage to the blacklist!", Color.red, null, uPlayer.SteamPlayer(), EChatMode.GLOBAL, Main.Instance.Configuration.Instance.LogoImage, true);
-                    }
-                    else if (command[0] == "remove")
-                    {
-                        if (PhysicsUtility.raycast(new Ray(uPlayer.Player.look.aim.position, uPlayer.Player.look.aim.forward), out RaycastHit rhit, Mathf.Infinity, RayMasks.BARRICADE_INTERACT))
-                        {
-                            BarricadeManager.tryGetInfo(rhit.transform, out byte x, out byte y, out ushort index, out ushort bindex, out BarricadeRegion barricadeR);
+                            BarricadeManager.tryGetInfo(door.door.transform, out byte x, out byte y, out ushort index, out ushort bindex, out BarricadeRegion barricadeR);
 
                             var Bindex = barricadeR.barricades[bindex];
                             var Bx = Bindex.point.x;
@@ -65,8 +50,67 @@ namespace BPickLock.Commands
                                 y = By,
                                 z = Bz
                             };
-                            Main.Instance.RemovePlayer(n_blacklist);
-                            ChatManager.serverSendMessage("You have successfully removed this door/storage from the blacklist!", Color.red, null, uPlayer.SteamPlayer(), EChatMode.GLOBAL, Main.Instance.Configuration.Instance.LogoImage, true);
+                            Main.Instance.AddPlayer(n_blacklist);
+                            ChatManager.serverSendMessage("You have successfully added this door/storage to the blacklist!", Color.red, null, uPlayer.SteamPlayer(), EChatMode.GLOBAL, Main.Instance.Configuration.Instance.LogoImage, true);
+                        }
+                        else if(barri != null)
+                        {
+                            BarricadeManager.tryGetInfo(ahit.transform, out byte x, out byte y, out ushort index, out ushort bindex, out BarricadeRegion barricadeR);
+
+                            var Bindex = barricadeR.barricades[bindex];
+                            var Bx = Bindex.point.x;
+                            var By = Bindex.point.y;
+                            var Bz = Bindex.point.z;
+                            var n_blacklist = new DoorBlackList
+                            {
+                                x = Bx,
+                                y = By,
+                                z = Bz
+                            };
+                            Main.Instance.AddPlayer(n_blacklist);
+                            ChatManager.serverSendMessage("You have successfully added this door/storage to the blacklist!", Color.red, null, uPlayer.SteamPlayer(), EChatMode.GLOBAL, Main.Instance.Configuration.Instance.LogoImage, true);
+                        }
+                    }
+                    else if (command[0] == "remove")
+                    {
+                        if (PhysicsUtility.raycast(new Ray(uPlayer.Player.look.aim.position, uPlayer.Player.look.aim.forward), out RaycastHit rhit, Mathf.Infinity, RayMasks.BARRICADE_INTERACT))
+                        {
+                            var rdoor = rhit.transform.GetComponent<InteractableDoorHinge>();
+                            var rbarri = rhit.transform.GetComponent<Interactable2SalvageBarricade>();
+                            if(rdoor != null)
+                            {
+                                BarricadeManager.tryGetInfo(rdoor.transform, out byte x, out byte y, out ushort index, out ushort bindex, out BarricadeRegion barricadeR);
+
+                                var Bindex = barricadeR.barricades[bindex];
+                                var Bx = Bindex.point.x;
+                                var By = Bindex.point.y;
+                                var Bz = Bindex.point.z;
+                                var n_blacklist = new DoorBlackList
+                                {
+                                    x = Bx,
+                                    y = By,
+                                    z = Bz
+                                };
+                                Main.Instance.RemovePlayer(n_blacklist);
+                                ChatManager.serverSendMessage("You have successfully removed this door/storage from the blacklist!", Color.red, null, uPlayer.SteamPlayer(), EChatMode.GLOBAL, Main.Instance.Configuration.Instance.LogoImage, true);
+                            }
+                            else if(rbarri != null)
+                            {
+                                BarricadeManager.tryGetInfo(rhit.transform, out byte x, out byte y, out ushort index, out ushort bindex, out BarricadeRegion barricadeR);
+
+                                var Bindex = barricadeR.barricades[bindex];
+                                var Bx = Bindex.point.x;
+                                var By = Bindex.point.y;
+                                var Bz = Bindex.point.z;
+                                var n_blacklist = new DoorBlackList
+                                {
+                                    x = Bx,
+                                    y = By,
+                                    z = Bz
+                                };
+                                Main.Instance.RemovePlayer(n_blacklist);
+                                ChatManager.serverSendMessage("You have successfully removed this door/storage from the blacklist!", Color.red, null, uPlayer.SteamPlayer(), EChatMode.GLOBAL, Main.Instance.Configuration.Instance.LogoImage, true);
+                            }
                         }
                         else
                         {

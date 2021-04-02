@@ -24,6 +24,7 @@ namespace BPickLock
     }
     public class Main : RocketPlugin<Config>
     {
+        public List<UnturnedPlayer> players = new List<UnturnedPlayer>();
         public DataStorage<List<DoorBlackList>> DoorBlackList { get; private set; }
         private List<DoorBlackList> doorData;
         public static Main Instance;
@@ -185,7 +186,7 @@ namespace BPickLock
                                             }
                                         }
                                     }
-                                    else // If door is blacklisted
+                                    else // If storage is blacklisted
                                     {
                                         ChatManager.serverSendMessage("You cannot picklock this stroage, as it is blacklisted!", Color.red, null, uPlayer.SteamPlayer(), EChatMode.GLOBAL, Configuration.Instance.LogoImage, true);
                                     }
@@ -196,9 +197,14 @@ namespace BPickLock
                 }
             }
         }
+        public void PickLockingCooldownTimer(float _cooldown, UnturnedPlayer uPlayer) => StartCoroutine(_Timer3(_cooldown, uPlayer));
         public void PickLockingDoorTimer(InteractableDoor door, float _pickTime, UnturnedPlayer uPlayer) => StartCoroutine(_Timer1(door, _pickTime, uPlayer));
         public void PickLockingStorageTimer(float _pickTime, UnturnedPlayer uPlayer) => StartCoroutine(_Timer(_pickTime, uPlayer));
-
+        private IEnumerator _Timer3(float _cooldown, UnturnedPlayer uPlayer)
+        {
+            yield return new WaitForSeconds(_cooldown);
+            players.RemoveAll(x => x.CSteamID.Equals(uPlayer.CSteamID));
+        }
         private IEnumerator _Timer(float timming, UnturnedPlayer uPlayer)
         {
             yield return new WaitForSeconds(timming);
@@ -230,7 +236,7 @@ namespace BPickLock
             return null;
         }
         #endregion PickLocking
-        public void DiscordMessage(UnityEngine.Color color, UnturnedPlayer uPlayer, string ds, string webhook)
+        public void DiscordMessage(Color color, UnturnedPlayer uPlayer, string ds, string webhook)
         {
             var n_webmessage = new WebhookMessage()
                  .PassEmbed()

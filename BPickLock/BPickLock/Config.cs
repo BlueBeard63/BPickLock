@@ -9,6 +9,7 @@ namespace BPickLock
         public string LogoImage;
         public bool AutoCloseDoors;
         public int AutoCloseDoorsDelay;
+        public float Cooldown;
         public void LoadDefaults()
         {
             PickLock_Config = new List<PickLock>
@@ -23,6 +24,7 @@ namespace BPickLock
                     }
                 }
             };
+            Cooldown = 300;
             AutoCloseDoors = false;
             AutoCloseDoorsDelay = 2500;
             LogoImage = "https://i.imgur.com/lv4E8TR.jpg";
